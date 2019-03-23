@@ -27,7 +27,7 @@ Please edit the following files on your system prior to building:
 
 	_sys.path.append(<where you *.rst files are located>)_
 	
-	I highly recommend changing the _html_theme_ to <b>default</b> or <b>sphinx_rtd_theme</b>
+	I highly recommend changing the _html_theme_ to "default" or "sphinx_rtd_theme"
 
 _cd_ into **docs** and type 
 
