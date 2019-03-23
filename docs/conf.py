@@ -15,7 +15,7 @@
 import os
 import sys
 sys.path.insert(0, os.path.abspath('.'))
-sys.path.append('/Users/freemonj/Documents/eclipse_wkspc_fun/ocr_code/BusinessCardOCR')
+sys.path.append('/Users/freemonj/git/business_card_ocr')
 
 
 # -- Project information -----------------------------------------------------
