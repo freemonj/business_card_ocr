@@ -20,9 +20,10 @@ LOG_FILE_NAME = path.join('logs', 'business-card-ocr.log')
 
 def _log_init():
     """
-    Initializes the program logger.
+    Initializes the rotating program logger.
+    :params: None
     :return: logger
-    :rtype: Logger
+    :rtype: Logger Object
     """
 
     # Creating logs directory if it does not exist already.
@@ -49,13 +50,16 @@ def _log_init():
 
 class ContactInfo(object):
     '''
-    classdocs
+    ContactInfo Class
     '''
 
 
     def __init__(self, doc):
         '''
         Constructor
+        :params: doc
+        :return: None
+        :rtype: None
         '''
         self.logger = _log_init()
         self.document = doc
@@ -65,6 +69,13 @@ class ContactInfo(object):
     
     
     def _isPhoneAFaxNum(self,line):
+        """
+        Checks to see if the phone number is a fax number for a given line in the input document.
+        :params: String
+        :return: Bool
+        :rtype: Bool
+        """
+        
         ans = None
         if ':' in line:
             ans = line.split(':',1)[0]
@@ -74,6 +85,14 @@ class ContactInfo(object):
         return False
                 
     def _sanitizeLine(self,line):
+        """
+        Sanitizes a given line from the input document by stripping all punctuation and newline/carriage returns.
+        Used for the getName() and getEmail() methods.
+        :params: String
+        :return: String
+        :rtype: String
+        """
+                
         line = line.replace(')','')
         line = line.replace('(', '')
         line = line.replace('-','')
@@ -83,6 +102,13 @@ class ContactInfo(object):
         return line
 
     def _numsanitizeLine(self,line):
+        """
+        Sanitizes a given line from the input document by stripping all punctuation, newline/carriage returns and whitespace.
+        Used for the getPhoneNumber() method.
+        :params: String
+        :return: String
+        :rtype: String
+        """        
         line = line.replace(')','')
         line = line.replace('(', '')
         line = line.replace('-','')
@@ -94,6 +120,12 @@ class ContactInfo(object):
 
      
     def _isUsernameInName(self,first,last,line):
+        """
+        Checks to see if the username of the email address is anywhere in the line.
+        :params: String, String, String
+        :return: Bool
+        :rtype: Bool
+        """              
         line = line.lower()
         if first is not None:
             remainder1 = first
@@ -155,8 +187,8 @@ class ContactInfo(object):
         '''
         Returns the phone number formatted as a sequence of digits
         :params: None
-        :return: string
-        :rtype: string
+        :return: Integer
+        :rtype: Integer
         '''  
         try:
             sanitizedline = None
@@ -208,8 +240,17 @@ class ContactInfo(object):
 
 
 class BusinessCardParser(ContactInfo):
+    '''
+    Business Card Parser Class that inherits from ContactInfo
+    '''      
         
     def __init__(self):
+        '''
+        Constructor
+        :params: None
+        :return: None
+        :rtype: None
+        '''        
         self.cinfo = None
         self.log = None
         
@@ -219,7 +260,7 @@ class BusinessCardParser(ContactInfo):
         Returns ContactInfo object
         :params: string
         :return: string
-        :rtype: ContactInfo object
+        :rtype: ContactInfo Object
         '''  
         
         self.cinfo = ContactInfo(document)
