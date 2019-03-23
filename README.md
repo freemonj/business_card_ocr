@@ -40,4 +40,4 @@ Then have your browser open the **index.html** file in _build/html/_ directory
 Example
 -------
 
-_$  python -f <input document path/filename>_ 
+_$  python ocr.py -f <input document path/filename>_ 
