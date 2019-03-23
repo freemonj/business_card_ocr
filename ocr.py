@@ -18,7 +18,7 @@ import traceback
 LOG_FILE_NAME = path.join('logs', 'business-card-ocr.log')
 #################################
 
-def log_init():
+def _log_init():
     """
     Initializes the program logger.
     :return: logger
@@ -57,14 +57,14 @@ class ContactInfo(object):
         '''
         Constructor
         '''
-        self.logger = log_init()
+        self.logger = _log_init()
         self.document = doc
         self.phonenumber = self.getPhoneNumber()
         self.email = self.getEmailAddress()
         self.name = self.getName()
     
     
-    def isPhoneAFaxNum(self,line):
+    def _isPhoneAFaxNum(self,line):
         ans = None
         if ':' in line:
             ans = line.split(':',1)[0]
@@ -73,7 +73,7 @@ class ContactInfo(object):
                 return True
         return False
                 
-    def santizeLine(self,line):
+    def _sanitizeLine(self,line):
         line = line.replace(')','')
         line = line.replace('(', '')
         line = line.replace('-','')
@@ -82,7 +82,7 @@ class ContactInfo(object):
         line = line.replace('\r','')        
         return line
 
-    def numsantizeLine(self,line):
+    def _numsanitizeLine(self,line):
         line = line.replace(')','')
         line = line.replace('(', '')
         line = line.replace('-','')
@@ -93,7 +93,7 @@ class ContactInfo(object):
         return line
 
      
-    def isUsernameInName(self,first,last,line):
+    def _isUsernameInName(self,first,last,line):
         line = line.lower()
         if first is not None:
             remainder1 = first
@@ -140,10 +140,10 @@ class ContactInfo(object):
                 for line in doc:
                                                                         
                     # Is first or last in the name found earlier?
-                    if self.isUsernameInName(first, last, line):
+                    if self._isUsernameInName(first, last, line):
                         self.logger.debug("type = {} and value = {}".format(type(line),line))
                         # Get rid of newlines and carriage returns for windows and Linux for output format                        
-                        line = self.santizeLine(line)
+                        line = self._sanitizeLine(line)
                         return line
             return None
                     
@@ -162,9 +162,9 @@ class ContactInfo(object):
             sanitizedline = None
             with open(self.document,mode='rt') as doc:
                 for line in doc:
-                    sanitizedline = self.numsantizeLine(line)
+                    sanitizedline = self._numsanitizeLine(line)
                     if ':' in sanitizedline:
-                        if not self.isPhoneAFaxNum(sanitizedline):                        
+                        if not self._isPhoneAFaxNum(sanitizedline):                        
                             try:
                                 val = int(sanitizedline.split(':',1)[1])
                                 return val                    
