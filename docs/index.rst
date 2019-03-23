@@ -51,7 +51,7 @@ Please edit the following files on your system after running:
     *$ sphinx-build -b html <docs directory path> <build/html directory path>*
 
 
-My documentation is already located at **index.html** file in **build/html/** directory.
+My documentation is already located at **index.html** file in **business_card_ocr/docs/_build** directory.
 
 
 Example
