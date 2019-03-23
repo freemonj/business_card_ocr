@@ -18,6 +18,7 @@ import traceback
 LOG_FILE_NAME = path.join('logs', 'business-card-ocr.log')
 #################################
 
+
 def _log_init():
     """
     Initializes the rotating program logger.
@@ -47,6 +48,7 @@ def _log_init():
     file_handler.setFormatter(logFormatter)
     logger.addHandler(file_handler)
     return logger
+
 
 class ContactInfo(object):
     '''
@@ -83,6 +85,7 @@ class ContactInfo(object):
             if ans == "fax":
                 return True
         return False
+    
                 
     def _sanitizeLine(self,line):
         """
@@ -100,6 +103,7 @@ class ContactInfo(object):
         line = line.replace('\n','')
         line = line.replace('\r','')        
         return line
+    
 
     def _numsanitizeLine(self,line):
         """
@@ -145,6 +149,7 @@ class ContactInfo(object):
                 remainder2 = first[x:]                            
         return False
     
+    
     def getName(self):
         '''
         Returns the full name of the individual (eg. John Smith, Susan Malick)
@@ -182,6 +187,7 @@ class ContactInfo(object):
         except Exception:
                 self.logger.error(time.strftime("%b %d %Y %H:%M:%S: ", time.localtime()) +
                              'Trace =  {}'.format(traceback.format_exc()))        
+        
         
     def getPhoneNumber(self):
         '''
@@ -236,7 +242,6 @@ class ContactInfo(object):
         
     def returnLog(self):
         return self.logger
-
 
 
 class BusinessCardParser(ContactInfo):
