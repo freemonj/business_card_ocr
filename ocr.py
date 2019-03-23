@@ -76,8 +76,7 @@ class ContactInfo(object):
         :params: String
         :return: Bool
         :rtype: Bool
-        """
-        
+        """       
         ans = None
         if ':' in line:
             ans = line.split(':',1)[0]
@@ -94,8 +93,7 @@ class ContactInfo(object):
         :params: String
         :return: String
         :rtype: String
-        """
-                
+        """        
         line = line.replace(')','')
         line = line.replace('(', '')
         line = line.replace('-','')
@@ -174,8 +172,7 @@ class ContactInfo(object):
             else:
                 first = wordlist            
             with open(self.document,mode='rt') as doc:
-                for line in doc:
-                                                                        
+                for line in doc:                                             
                     # Is first or last in the name found earlier?
                     if self._isUsernameInName(first, last, line):
                         self.logger.debug("type = {} and value = {}".format(type(line),line))
@@ -241,6 +238,12 @@ class ContactInfo(object):
 
         
     def returnLog(self):
+        '''
+        Returns the instance of logger in ContactInfo
+        :params: None
+        :return: logger
+        :rtype: Logger Object
+        '''          
         return self.logger
 
 
@@ -267,7 +270,6 @@ class BusinessCardParser(ContactInfo):
         :return: string
         :rtype: ContactInfo Object
         '''  
-        
         self.cinfo = ContactInfo(document)
         self.log = self.cinfo.returnLog()
         self.log.debug("cinfo.name = {}".format(self.cinfo.name))
