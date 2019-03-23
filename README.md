@@ -12,13 +12,13 @@ This application parses the results of the optical character recognition (OCR) c
 Methodology
 -----------
 	Memory:
-		I process the input document at time as opposed to reading the entire document into memory
+		I process the input document one line at time as opposed to reading the entire document into memory.
 	Runtime:
 		My most compute expensive function is locating any part of the username in the line.
-		The run at worst case O(n) + O(n) = 2 O(n) -> O(n)
-		I could have used more built-ins i.e. translate() or regular expressions but I chose readability over any additional performance increases
+		The runtime at worst case O(n) + O(n) = 2 O(n) which equates to O(n).
+		I could have used more built-ins i.e. translate() or regular expressions but I chose readability over any additional performance increases.
 	Storage:
-		I have a rotating time-stamped log that creates a log folder and appends log level information into "business-card-ocr.log"
+		I have a rotating time-stamped log for debugging purposes that creates a log folder and appends log level information into "business-card-ocr.log".
 
 
 Installation / Usage
