@@ -9,6 +9,16 @@ Overview
 
 This application parses the results of the optical character recognition (OCR) component in order to extract the name, phone number, and email address from the processed business card image.
 
+Methodology
+-----------
+	Memory:
+		I process the input document at time as opposed to reading the entire document into memory
+	Runtime:
+		My most compute expensive function is locating any part of the username in the line.
+		The run at worst case O(n) + O(n) = 2 O(n) -> O(n)
+		I could have used more built-ins i.e. translate() or regular expressions but I chose readability over any additional performance increases
+	Storage:
+		I have a rotating time-stamped log that creates a log folder and appends log level information into "business-card-ocr.log"
 
 
 Installation / Usage
@@ -21,7 +31,9 @@ the python standard template library are necessary to run the **ocr** applicatio
 
 You need to install _sphinx_ package: [here](http://www.sphinx-doc.org/en/master/usage/installation.html)
 
-Please edit the following files on your system prior to building:
+Please edit the following files on your system after running: 
+	
+	$ sphinx-quickstart
 
 **conf.py**:
 
@@ -34,7 +46,7 @@ _cd_ into **docs** and type
     _$ sphinx-build -b html <docs directory path> <build/html directory path>_
 
 
-Then have your browser open the **index.html** file in _build/html/_ directory
+My documentation is already located at **index.html** file in _build/html/_ directory.
 
 
 Example
