@@ -22,7 +22,7 @@ the pythone standard template library are necessary.
 You need to install sphinx package: [here](http://www.sphinx-doc.org/en/master/usage/installation.html)
 
 _cd_ into **docs** and type 
-    _$ make html_
+    _$ sphinx-build -b html <docs directory path> <build/html directory path>_
 
 Then have your browser open the **index.html** file in _build/html/_ directory
 
