@@ -46,7 +46,7 @@ _cd_ into **docs** and type
     _$ sphinx-build -b html <docs directory path> <build/html directory path>_
 
 
-My documentation is already located at **index.html** file in _build/html/_ directory.
+My documentation is already located at **index.html** file in _business_card_ocr/docs/build/_ directory.
 
 
 Example
