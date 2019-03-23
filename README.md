@@ -14,12 +14,12 @@ This application parses the results of the optical character recognition (OCR) c
 Installation / Usage
 --------------------
 This application requires python version 3.x. No external packages outside of
-the pythone standard template library are necessary.
+the python standard template library are necessary to run the **ocr** application.
 
 
-**To build web based docs:**
+**To build web based documentation:**
 
-You need to install sphinx package: [here](http://www.sphinx-doc.org/en/master/usage/installation.html)
+You need to install _sphinx_ package: [here](http://www.sphinx-doc.org/en/master/usage/installation.html)
 
 Please edit the following files on your system prior to building:
 
