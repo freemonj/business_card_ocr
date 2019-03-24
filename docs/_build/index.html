@@ -82,6 +82,7 @@
               <div class="local-toc"><ul>
 <li><a class="reference internal" href="#">Business Card OCR</a><ul>
 <li><a class="reference internal" href="#overview">Overview</a></li>
+<li><a class="reference internal" href="#interface-specification">Interface Specification</a></li>
 <li><a class="reference internal" href="#methodology">Methodology</a></li>
 <li><a class="reference internal" href="#installation-usage">Installation / Usage</a></li>
 <li><a class="reference internal" href="#example">Example</a></li>
@@ -159,6 +160,19 @@ author: Freemon Johnson</p>
 <div class="section" id="overview">
 <h2>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h2>
 <p>This application parses the results of the optical character recognition (OCR) component in order to extract the name, phone number, and email address from the processed business card image.</p>
+</div>
+<div class="section" id="interface-specification">
+<h2>Interface Specification<a class="headerlink" href="#interface-specification" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><dl class="docutils">
+<dt>ContactInfo</dt>
+<dd>String getName() : returns the full name of the individual (eg. John Smith, Susan Malick)
+String getPhoneNumber() : returns the phone number formatted as a sequence of digits
+String getEmailAddress() : returns the email address</dd>
+<dt>BusinessCardParser</dt>
+<dd>ContactInfo getContactInfo(String document)</dd>
+</dl>
+</div></blockquote>
 </div>
 <div class="section" id="methodology">
 <h2>Methodology<a class="headerlink" href="#methodology" title="Permalink to this headline">¶</a></h2>
