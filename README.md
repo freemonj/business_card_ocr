@@ -9,6 +9,17 @@ Overview
 
 This application parses the results of the optical character recognition (OCR) component in order to extract the name, phone number, and email address from the processed business card image.
 
+
+Interface Specification
+----------------------
+	ContactInfo
+	    String getName() : returns the full name of the individual (eg. John Smith, Susan Malick)
+	    String getPhoneNumber() : returns the phone number formatted as a sequence of digits
+	    String getEmailAddress() : returns the email address
+	
+	BusinessCardParser
+	    ContactInfo getContactInfo(String document)
+
 Methodology
 -----------
 	Memory:
