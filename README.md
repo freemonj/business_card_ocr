@@ -63,4 +63,4 @@ My documentation is already located at **index.html** file in _business_card_ocr
 Example
 -------
 
-	_$  python ocr.py -f <input document path/filename>_ 
+	$  python ocr.py -f <input document path/filename>
