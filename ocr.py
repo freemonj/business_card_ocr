@@ -81,7 +81,7 @@ class ContactInfo(object):
         if ':' in line:
             ans = line.split(':',1)[0]
             ans = ans.lower()
-            if ans == "fax":
+            if ans == "fax" or ans == "cell":
                 return True
         return False
     
