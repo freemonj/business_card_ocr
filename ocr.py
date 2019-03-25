@@ -233,7 +233,7 @@ class ContactInfo(object):
                 for line in doc:
                     if '@' in line:                        
                         self.logger.debug("type = {} and value = {}".format(type(line),line))
-                return line
+                        return line
         except Exception:
                 self.logger.error(time.strftime("%b %d %Y %H:%M:%S: ", time.localtime()) +
                              'Trace = {}'.format(traceback.format_exc()))        
