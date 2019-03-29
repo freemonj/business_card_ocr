@@ -219,7 +219,7 @@ class ContactInfo():
                              'Trace = {}'.format(traceback.format_exc()))        
 
         
-    def returnLog(self):
+    def _returnLog(self):
         '''
         Returns the instance of logger in ContactInfo
         :params: None
@@ -254,7 +254,7 @@ class BusinessCardParser(ContactInfo):
         '''  
         
         self.cinfo = ContactInfo(document)
-        self.log = self.cinfo.returnLog()
+        self.log = self.cinfo._returnLog()
         self.log.debug("cinfo.name = {}".format(self.cinfo.name))
         self.log.debug("cinfo.phone = {}".format(self.cinfo.number))
         self.log.debug("cinfo.email = {}".format(self.cinfo.email))        
