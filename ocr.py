@@ -12,6 +12,7 @@ import os
 from os import path
 import sys
 import traceback
+import string
 
 
 # Location to log messages to.
@@ -50,13 +51,13 @@ def _log_init():
     return logger
 
 
-class ContactInfo(object):
+class ContactInfo():
     '''
     ContactInfo Class
     '''
 
 
-    def __init__(self, doc):
+    def __init__(self,doc):
         '''
         Constructor
         :params: doc
@@ -64,11 +65,12 @@ class ContactInfo(object):
         :rtype: None
         '''
         self.logger = _log_init()
+        self.email = None
+        self.name = None
+        self.number = None
         self.document = doc
-        self.phonenumber = self.getPhoneNumber()
-        self.email = self.getEmailAddress()
-        self.name = self.getName()
-    
+        self._processFile(self.document)
+            
     
     def _isPhoneAFaxNum(self,line):
         """
@@ -78,11 +80,10 @@ class ContactInfo(object):
         :rtype: Bool
         """       
         ans = None
-        if ':' in line:
-            ans = line.split(':',1)[0]
-            ans = ans.lower()
-            if ans == "fax" or ans == "cell":
-                return True
+        ans = line.split(':',1)[0]
+        ans = ans.lower()
+        if ans == "fax" or ans == "cell":
+            return True
         return False
     
                 
@@ -93,16 +94,14 @@ class ContactInfo(object):
         :params: String
         :return: String
         :rtype: String
-        """        
-        line = line.replace(')','')
-        line = line.replace('(', '')
-        line = line.replace('-','')
-        line = line.replace('_','')
-        line = line.replace('+','')
-        line = line.replace('\n','')
-        line = line.replace('\r','')        
-        return line
-    
+        """     
+        try:   
+            char = None
+            line = line.translate({ord(c): None for c in '()-_+\n\r'})
+            return line
+        except:
+            self.logger.error(traceback.format_exc())
+        
 
     def _numsanitizeLine(self,line):
         """
@@ -112,45 +111,42 @@ class ContactInfo(object):
         :return: String
         :rtype: String
         """        
-        line = line.replace(')','')
-        line = line.replace('(', '')
-        line = line.replace('-','')
-        line = line.replace('_','')        
-        line = line.replace('+','')
-        line = line.replace(' ','')
-        line = line.replace('\n','')
-        line = line.replace('\r','')        
+        line = line.translate({ord(c): None for c in '&()-_+\n\r" "'})
         return line
 
-     
-    def _isUsernameInName(self,first,last,line):
-        """
-        Checks to see if the username of the email address is anywhere in the line.
-        :params: String, String, String
-        :return: Bool
-        :rtype: Bool
-        """              
-        line = line.lower()
-        if first is not None:
-            remainder1 = first
-            first = first.lower()
-            first_length = len(first)
-            for i in range(1,int(first_length/2)):
-                if remainder1 in line:
-                    return True
-                remainder1 = first[i:]     
-        if last is not None:
-            remainder2 = last
-            last = last.lower()
-            last_length = len(last)
-            for x in range(1,int(last_length/2)):
-                if remainder2 in line:
-                    return True
-                remainder2 = first[x:]                            
-        return False
+
+    def _processFile(self,document):
+        namecache = []
+        nameflag = False
+        numberflag = False
+        emailflag = False        
+        try:
+            with open(document,mode='rt') as doc:
+                for line in doc:
+                    if not emailflag:
+                        self.email = self.getEmailAddress(line)
+                        if self.email is not None:
+                            emailflag = True
+                    if not numberflag:
+                        self.number = self.getPhoneNumber(line)                        
+                        if self.number is not None:
+                            numberflag = True
+                    if not emailflag and not numberflag:
+                        namecache.append(line)
+                        emailflag = False
+                        numberflag = False
+            if emailflag:
+                self.name = self.getName(self.email, namecache)
+            self.logger.debug("Name: {}".format(self.name))
+            self.logger.debug("Telephone: {}".format(self.number))
+            self.logger.debug("Email: {}".format(self.email))                        
+                
+        except:
+            self.logger.error(time.strftime("%b %d %Y %H:%M:%S: ", time.localtime()) +
+                         'Trace =  {}'.format(traceback.format_exc()))        
+
     
-    
-    def getName(self):
+    def getName(self,email,namecache):
         '''
         Returns the full name of the individual (eg. John Smith, Susan Malick)
         :params: None
@@ -158,37 +154,23 @@ class ContactInfo(object):
         :rtype: string
         '''        
         try:
-            wordlist = None
-            first = None
-            last = None
-            wordlist = self.email.split('@',1)[0] # grab username in email
-            if '.' in wordlist:
-                first = wordlist.split('.',1)[0]
-                last = wordlist.split('.',1)[1]
-            elif '-' in wordlist:
-                first = wordlist.split('-',1)[0]
-                last = wordlist.split('-',1)[1]
-            elif '_' in wordlist:
-                first = wordlist.split('_',1)[0]
-                last = wordlist.split('_',1)[1]
-            else:
-                first = wordlist            
-            with open(self.document,mode='rt') as doc:
-                for line in doc:                                             
-                    # Is first or last in the name found earlier?
-                    if self._isUsernameInName(first, last, line):
-                        self.logger.debug("type = {} and value = {}".format(type(line),line))
-                        # Get rid of newlines and carriage returns for windows and Linux for output format                        
-                        line = self._sanitizeLine(line)
-                        return line
-            return None
-                    
+            fname = None
+            username = email.split('@',1)[0]
+            for ind,name in enumerate(namecache):
+                orig = self._sanitizeLine(name)
+                namelen = len(name)
+                name = name.lower()
+                for i in range(1,int(namelen/2)):
+                    if username in name:
+                        return orig
+                    username = username[ind + 1:]
+            return None                     
         except Exception:
                 self.logger.error(time.strftime("%b %d %Y %H:%M:%S: ", time.localtime()) +
                              'Trace =  {}'.format(traceback.format_exc()))        
         
         
-    def getPhoneNumber(self):
+    def getPhoneNumber(self,line):
         '''
         Returns the phone number formatted as a sequence of digits
         :params: None
@@ -197,31 +179,29 @@ class ContactInfo(object):
         '''  
         try:
             sanitizedline = None
-            with open(self.document,mode='rt') as doc:
-                for line in doc:
-                    sanitizedline = self._numsanitizeLine(line)
-                    if ':' in sanitizedline:
-                        if not self._isPhoneAFaxNum(sanitizedline):                        
-                            try:
-                                val = int(sanitizedline.split(':',1)[1])
-                                return val                    
-                            except:
-                                pass
-                    else:
-                        try:
-                            val = int(sanitizedline)
-                            return val
-                        except:
-                            pass
-                self.logger.debug("type = {} and value = {}".format(type(sanitizedline),sanitizedline))
-                return None
+            sanitizedline = self._numsanitizeLine(line)
+            if ':' in sanitizedline:
+                if not self._isPhoneAFaxNum(sanitizedline):                        
+                    try:
+                        val = int(sanitizedline.split(':',1)[1])
+                        return val                    
+                    except:
+                        pass
+            else:
+                try:
+                    val = int(sanitizedline)
+                    return val
+                except:
+                    pass
+            self.logger.debug("type = {} and value = {}".format(type(sanitizedline),sanitizedline))
+            return None
         except Exception:
                 self.logger.error(time.strftime("%b %d %Y %H:%M:%S: ", time.localtime()) +
                              'Trace =  {}'.format(traceback.format_exc()))        
 
 
         
-    def getEmailAddress(self):
+    def getEmailAddress(self,line):
         '''
         Returns the email address
         :params: None
@@ -229,11 +209,11 @@ class ContactInfo(object):
         :rtype: string
         '''  
         try:
-            with open(self.document,mode='rt') as doc:
-                for line in doc:
-                    if '@' in line:                        
-                        self.logger.debug("type = {} and value = {}".format(type(line),line))
-                        return line
+            if '@' in line and '.' in line:                        
+                self.logger.debug("type = {} and value = {}".format(type(line),line))
+                return line
+            else:
+                return None
         except Exception:
                 self.logger.error(time.strftime("%b %d %Y %H:%M:%S: ", time.localtime()) +
                              'Trace = {}'.format(traceback.format_exc()))        
@@ -272,10 +252,11 @@ class BusinessCardParser(ContactInfo):
         :return: string
         :rtype: ContactInfo Object
         '''  
+        
         self.cinfo = ContactInfo(document)
         self.log = self.cinfo.returnLog()
         self.log.debug("cinfo.name = {}".format(self.cinfo.name))
-        self.log.debug("cinfo.phone = {}".format(self.cinfo.phonenumber))
+        self.log.debug("cinfo.phone = {}".format(self.cinfo.number))
         self.log.debug("cinfo.email = {}".format(self.cinfo.email))        
         return self.cinfo
 
@@ -307,9 +288,10 @@ if __name__ == '__main__':
         bcpobj = bcp.getContactInfo(inputfile)
         bcpobj.logger.info("TEST")
         print("Name: {}".format(bcpobj.name))
-        print("Phone: {}".format(bcpobj.phonenumber))
+        print("Phone: {}".format(bcpobj.number))
         print("Email: {}".format(bcpobj.email))
     except:
         if len(sys.argv) <= 1:
             print("error trace = {}".format(traceback.format_exc()))
-    
+        else:
+            print("error trace = {}".format(traceback.format_exc()))
