@@ -135,7 +135,7 @@ class ContactInfo():
                         namecache.append(line)
                         emailflag = False
                         numberflag = False
-            if emailflag:
+            if self.email is not None:
                 self.name = self.getName(self.email, namecache)
             self.logger.debug("Name: {}".format(self.name))
             self.logger.debug("Telephone: {}".format(self.number))
