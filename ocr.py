@@ -153,17 +153,23 @@ class ContactInfo():
         :return: string
         :rtype: string
         '''        
-        try:
-            fname = None
+        try:            
             username = email.split('@',1)[0]
-            for ind,name in enumerate(namecache):
-                orig = self._sanitizeLine(name)
-                namelen = len(name)
+            stripun = username.translate({ord(c): None for c in '.&()-_+\n\r" "'})
+            stripun = stripun.lower()
+            orig = stripun
+            stripunlen = len(stripun)
+            for name in namecache:
+                fname = name
                 name = name.lower()
-                for i in range(1,int(namelen/2)):
-                    if username in name:
-                        return orig
-                    username = username[ind + 1:]
+                name = name.translate({ord(c): None for c in '.&()-_+\n\r" "'})                                
+                for i in range(1,int(stripunlen/2)):
+                    if stripun in name:
+                        fname = fname.translate({ord(c): None for c in '\n\r'})
+                        return fname
+                    stripun = stripun[i:]
+                stripun = orig
+                    
             return None                     
         except Exception:
                 self.logger.error(time.strftime("%b %d %Y %H:%M:%S: ", time.localtime()) +
