@@ -292,7 +292,7 @@ if __name__ == '__main__':
         inputfile = args.file
         bcp = BusinessCardParser()
         bcpobj = bcp.getContactInfo(inputfile)
-        bcpobj.logger.info("TEST")
+        bcpobj.logger.info("_____")
         print("Name: {}".format(bcpobj.name))
         print("Phone: {}".format(bcpobj.number))
         print("Email: {}".format(bcpobj.email))
