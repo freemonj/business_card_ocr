@@ -57,7 +57,7 @@ cd into **docs** and type
     $ sphinx-build -b html <docs directory path> <build/html directory path>
 
 
-My documentation can be opened with a web browser at **index.html** file in _business_card_ocr/docs/\_build/_ directory.
+My documentation can presently be opened with a web browser at **index.html** file in _business_card_ocr/docs/\_build/_ directory.
 
 
 Example
