@@ -82,7 +82,7 @@ class ContactInfo():
         ans = None
         ans = line.split(':',1)[0]
         ans = ans.lower()
-        if ans == "fax" or ans == "cell":
+        if ans in ['fax','home','work','cell']:
             return True
         return False
     
