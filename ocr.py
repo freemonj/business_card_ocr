@@ -228,15 +228,6 @@ class ContactInfo():
                              'Trace = {}'.format(traceback.format_exc()))        
 
         
-    def _returnLog(self):
-        '''
-        Returns the instance of logger in ContactInfo
-        :params: None
-        :return: logger
-        :rtype: Logger Object
-        '''          
-        return self.logger
-
 
 class BusinessCardParser(ContactInfo):
     '''
