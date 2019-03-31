@@ -8,8 +8,7 @@ import logging
 import argparse
 from logging.handlers import TimedRotatingFileHandler
 import time
-import os
-from os import path
+from os import path,makedirs
 import sys
 import traceback
 import string
@@ -29,8 +28,12 @@ def _log_init():
     """
 
     # Creating logs directory if it does not exist already.
-    if not os.path.exists('logs'):
-        os.makedirs('logs')
+#     if not os.path.exists('logs'):
+#         os.makedirs('logs')
+    if not path.exists('logs'):
+        makedirs('logs')
+        
+
     
     logFormatter = logging.Formatter("%(asctime)s [%(threadName)-12.12s][%(levelname)-5.5s]  %(message)s")
 
@@ -248,7 +251,6 @@ class BusinessCardParser(ContactInfo):
         :rtype: None
         '''        
         self.cinfo = None
-        self.log = None
         super().__init__()
         
         
@@ -259,13 +261,12 @@ class BusinessCardParser(ContactInfo):
         :return: string
         :rtype: ContactInfo Object
         '''          
-        self.cinfo = ContactInfo(document)
-        self.cinfo._processFile(self.cinfo.document)
-        self.logger.debug("cinfo.name = {}".format(self.cinfo.name))
-        self.logger.debug("cinfo.phone = {}".format(self.cinfo.number))
-        self.logger.debug("cinfo.email = {}".format(self.cinfo.email))        
-                
-        return self.cinfo
+        self._processFile(document)
+        self.logger.debug("BCP.name = {}".format(self.name))
+        self.logger.debug("BCP.phone = {}".format(self.number))
+        self.logger.debug("BCP.email = {}".format(self.email))        
+        
+        return self
 
 
 
