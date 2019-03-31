@@ -187,17 +187,16 @@ class ContactInfo():
             sanitizedline = None
             sanitizedline = self._numsanitizeLine(line)
             if ':' in sanitizedline:
-                if not self._isPhoneAFaxNum(sanitizedline):                        
-                    try:
-                        val = int(sanitizedline.split(':',1)[1])
-                        return val                    
-                    except:
-                        pass
-            else:
-                try:
-                    val = int(sanitizedline)
-                    return val
-                except:
+                if not self._isPhoneAFaxNum(sanitizedline):
+                    val = sanitizedline.split(':',1)[1]                                      
+                    if val.isdigit():
+                        return val
+                    else:
+                        pass                        
+            else:                
+                if sanitizedline.isdigit():
+                    return sanitizedline
+                else:
                     pass
             self.logger.debug("type = {} and value = {}".format(type(sanitizedline),sanitizedline))
             return None
