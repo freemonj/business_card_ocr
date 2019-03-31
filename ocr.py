@@ -72,7 +72,6 @@ class ContactInfo():
         self.name = None
         self.number = None
         self.document = doc
-        #self._processFile(self.document)
             
     
     def _isPhoneAFaxNum(self,line):
