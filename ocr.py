@@ -57,7 +57,7 @@ class ContactInfo():
     '''
 
 
-    def __init__(self,doc):
+    def __init__(self,doc=None):
         '''
         Constructor
         :params: doc
@@ -69,7 +69,7 @@ class ContactInfo():
         self.name = None
         self.number = None
         self.document = doc
-        self._processFile(self.document)
+        #self._processFile(self.document)
             
     
     def _isPhoneAFaxNum(self,line):
@@ -216,6 +216,7 @@ class ContactInfo():
         try:
             if '@' in line and '.' in line:                        
                 self.logger.debug("type = {} and value = {}".format(type(line),line))
+                line = line.translate({ord(c): None for c in '\n\r'})
                 return line
             else:
                 return None
@@ -248,6 +249,7 @@ class BusinessCardParser(ContactInfo):
         '''        
         self.cinfo = None
         self.log = None
+        super().__init__()
         
         
     def getContactInfo(self,document):
@@ -256,13 +258,13 @@ class BusinessCardParser(ContactInfo):
         :params: string
         :return: string
         :rtype: ContactInfo Object
-        '''  
-        
+        '''          
         self.cinfo = ContactInfo(document)
-        self.log = self.cinfo._returnLog()
-        self.log.debug("cinfo.name = {}".format(self.cinfo.name))
-        self.log.debug("cinfo.phone = {}".format(self.cinfo.number))
-        self.log.debug("cinfo.email = {}".format(self.cinfo.email))        
+        self.cinfo._processFile(self.cinfo.document)
+        self.logger.debug("cinfo.name = {}".format(self.cinfo.name))
+        self.logger.debug("cinfo.phone = {}".format(self.cinfo.number))
+        self.logger.debug("cinfo.email = {}".format(self.cinfo.email))        
+                
         return self.cinfo
 
 
