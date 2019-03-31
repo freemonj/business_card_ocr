@@ -241,7 +241,6 @@ class BusinessCardParser(ContactInfo):
         :return: None
         :rtype: None
         '''        
-        self.cinfo = None
         super().__init__()
         
         
