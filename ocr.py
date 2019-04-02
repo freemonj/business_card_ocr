@@ -115,8 +115,21 @@ class ContactInfo():
         """        
         line = line.translate({ord(c): None for c in '&()-_+\n\r" "'})
         return line
-
-
+    
+    def _isLineAphaNumeric(self,line):
+        """
+        Check to se if the line contains numbers and letters that means it is an address most likely.
+        :params: String
+        :return: Bool
+        :rtype: Bool
+        """ 
+        val = self._numsanitizeLine(line)
+        if not val.isalpha():
+            return True
+        else:
+            return False       
+    
+    
     def _processFile(self,document):
         namecache = []
         nameflag = False
@@ -134,7 +147,8 @@ class ContactInfo():
                         if self.number is not None:
                             numberflag = True
                     if not emailflag and not numberflag:
-                        namecache.append(line)
+                        if not self._isLineAphaNumeric(line):
+                            namecache.append(line)
                         emailflag = False
                         numberflag = False
             if self.email is not None:
@@ -157,6 +171,8 @@ class ContactInfo():
         '''        
         try:            
             username = email.split('@',1)[0]
+            domain = email.split('@',1)[1]
+            domainname = domain.split('.',1)[0]
             stripun = username.translate({ord(c): None for c in '.&()-_+\n\r" "'})
             stripun = stripun.lower()
             orig = stripun
@@ -164,7 +180,9 @@ class ContactInfo():
             for name in namecache:
                 fname = name
                 name = name.lower()
-                name = name.translate({ord(c): None for c in '.&()-_+\n\r" "'})                                
+                name = name.translate({ord(c): None for c in '.&()-_+\n\r" "'})   
+                if domainname in name:
+                    continue
                 for i in range(1,int(stripunlen/2)):
                     if stripun in name:
                         fname = fname.translate({ord(c): None for c in '\n\r'})
